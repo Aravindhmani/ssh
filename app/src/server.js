@@ -1,12 +1,13 @@
 import Express from 'express';
 import path from 'path';
-import PrettyError from 'pretty-error';
+// import PrettyError from 'pretty-error';
 import http from 'http';
 import morgan from 'morgan';
+import fetch from 'node-fetch';
 
 import config from './config';
 
-const pretty = new PrettyError();
+// const pretty = new PrettyError();
 const app = new Express();
 const server = new http.Server(app);
 
@@ -18,15 +19,21 @@ else
 
 app.use('/static', Express.static(path.join(__dirname, '..', 'static')));
 
-app.use((req, res) => {
-  if (req.originalUrl === '/404') {
-    res.status(404).send('Not Found');
-    if (global.__DEVELOPMENT__)
-      console.error(pretty.render(new Error('Ooh no! /404 asked.')));
-  } else {
-    res.status(200).send('Works');
-  }
+app.get('/create-user', (req, res) => {
+  fetch('https://httpbin.org/ip').then(
+    (response) => {
+      response.text().then((data) => {
+        console.log(data);
+        const ip = JSON.parse(data);
+        res.send(ip.origin);
+      });
+    },
+    (error) => {
+      console.error(error);
+      res.status(500).send('something went wrong');
+    });
 });
+
 
 // Listen at the server
 if (config.port) {
