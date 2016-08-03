@@ -39,13 +39,15 @@ app.use('/static', Express.static(path.join(__dirname, '..', 'static')));
 //     });
 // });
 
-app.post('/create-user', (req, res) => {
+app.post('/create-ssh-user', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  exec(`./create_ssh_user1.sh ${username} ${password}`, (error, stdout, stderr) => {
+  exec(`./create_ssh_user.sh ${username} ${password}`, (error, stdout, stderr) => {
+    console.log(__dirname);
     if (!error) {
-      res.send('User created!!');
-      console.log('User created', username, password);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({ message:'user created.' }));
+      console.log('User created: ', username, password);
       if (stdout) {
         console.log(`stdout : ${stdout}`);
       }
@@ -53,23 +55,29 @@ app.post('/create-user', (req, res) => {
         console.log(`stderr : ${stderr}`);
       }
     } else {
-      console.log('User not created!!');
-      console.log('Error: ', error);
-      res.send('Internal error occured executing the script useradd!!');
+      console.log('user not created', username);
+      console.log('error: ', error);
+      res.send({ message : 'Internal error useradd' });
     }
   });
 });
 
-app.post('/delete-user', (req, res) => {
+app.post('/delete-ssh-user', (req, res) => {
   const username = req.body.username;
   exec(`./delete_ssh_user.sh ${username}`, (error, stdout, stderr) => {
     if (!error) {
-      console.log('User deleted', username);
-      res.send('User deleted Successfully');
+      console.log('user deleted', username);
+      res.send(JSON.stringify({ message : 'user deleted successfully' }));
+      if (stdout) {
+        console.log(`stdout : ${stdout}`);
+      }
+      if (stderr) {
+        console.log(`stderr : ${stderr}`);
+      }
     } else {
-      console.log('User not deleted');
-      console.log('Error: ', error);
-      res.send('Internal error during command executing  userdel!!')
+      console.log('user not deleted', username);
+      console.log('error: ', error);
+      res.send(JSON.stringify({ message : 'Internal error userdel' }));
     }
   });
 });
@@ -79,18 +87,20 @@ app.post('/update-ssh-password', (req, res) => {
   const password = req.body.password;
   exec(`./update_ssh_password.sh ${username} ${password}`, (error, stdout, stderr) => {
     if (!error) {
-      console.log('User password updated Successfully', username);
-      res.send('User password updated Successfully');
+      console.log('user password updated successfully', username);
+      res.send(JSON.stringify({ message:'user password updated successfully' }));
+      if (stdout) {
+        console.log(`stdout : ${stdout}`);
+      }
+      if (stderr) {
+        console.log(`stderr : ${stderr}`);
+      }
     } else {
-      console.log('Failed to update password');
-      console.log('Error: ', error);
-      res.send('Internal error during command executing passwd')
+      console.log('Failed to update password', username);
+      console.log('error: ', error);
+      res.send(JSON.stringify({ message:'Internal error passwd' }));
     }
   });
-});
-
-app.post('/update-ssh-password', (req, res) => {
-  res.send('Password Updated Successfully!!');
 });
 
 // Listen at the server
