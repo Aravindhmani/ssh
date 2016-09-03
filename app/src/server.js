@@ -39,6 +39,11 @@ app.use('/static', Express.static(path.join(__dirname, '..', 'static')));
 //     });
 // });
 
+app.get('/test-server', (req, res) => {
+  console.log('**********  Server running!  ***************');
+  res.send(JSON.stringify({ message:'Server running!' }));
+});
+
 app.post('/create-ssh-user', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
