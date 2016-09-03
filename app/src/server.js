@@ -110,6 +110,27 @@ app.post('/delete-ssh-user', (req, res) => {
   });
 });
 
+app.post('/delete-user-db', (req, res) => {
+  const username = req.body.username;
+  exec(`./delete_user_db.sh ${username}`, (error, stdout, stderr) => {
+    if (!error) {
+      console.log('user db deleted', username);
+      res.send(JSON.stringify({ message : 'user db deleted successfully' }));
+      if (stdout) {
+        console.log(`stdout : ${stdout}`);
+      }
+      if (stderr) {
+        console.log(`stderr : ${stderr}`);
+      }
+    } else {
+      console.log('user db not deleted', username);
+      console.log('error: ', error);
+      res.send(JSON.stringify({ message : 'Internal error' }));
+    }
+  });
+});
+
+
 app.post('/update-ssh-password', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
