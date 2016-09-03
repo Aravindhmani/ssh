@@ -62,6 +62,29 @@ app.post('/create-ssh-user', (req, res) => {
   });
 });
 
+app.post('/create-database', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  exec(`./setup_user_db.sh ${username} ${password}`, (error, stdout, stderr) => {
+    console.log(__dirname);
+    if (!error) {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(JSON.stringify({ message:'user database created.' }));
+      console.log('User database created: ', username, password);
+      if (stdout) {
+        console.log(`stdout : ${stdout}`);
+      }
+      if (stderr) {
+        console.log(`stderr : ${stderr}`);
+      }
+    } else {
+      console.log('user database not created', username);
+      console.log('error: ', error);
+      res.send({ message : 'Internal error' });
+    }
+  });
+});
+
 app.post('/delete-ssh-user', (req, res) => {
   const username = req.body.username;
   exec(`./delete_ssh_user.sh ${username}`, (error, stdout, stderr) => {
