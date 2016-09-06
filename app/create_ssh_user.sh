@@ -16,7 +16,7 @@
    if [  $? -ne  0  ]
    then 
       echo "error: Must execute as root user !!! "
-      exit 0;
+      exit 1;
    fi
    export A_NEW_USER=$1
    export NEW_USER_PWD=$2
@@ -40,7 +40,7 @@
    A_NEW_USER_HOME=/home/${A_NEW_USER}
    else
    echo "The ${A_NEW_USER} user account is already configured in ${A_NEW_USER_HOME} . . . "
-   exit 0
+   exit 1
    fi
    #
    echo "................................................................"
