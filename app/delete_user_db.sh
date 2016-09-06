@@ -4,7 +4,7 @@
    if [  $? -ne  0  ]
    then 
       echo "error: Must execute as root user !!! "
-      exit 0;
+      exit 1;
    fi
    export A_NEW_USER=$1
    
