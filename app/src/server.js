@@ -85,7 +85,7 @@ app.post('/create-database', (req, res) => {
     } else {
       console.log('user database not created', username);
       console.log('error: ', error);
-      res.send({ message : 'Internal error' });
+      res.status(500).send({ message : 'Internal error' });
     }
   });
 });
@@ -105,7 +105,7 @@ app.post('/delete-ssh-user', (req, res) => {
     } else {
       console.log('user not deleted', username);
       console.log('error: ', error);
-      res.send(JSON.stringify({ message : 'Internal error userdel' }));
+      res.status(500).send(JSON.stringify({ message : 'Internal error userdel' }));
     }
   });
 });
@@ -125,7 +125,7 @@ app.post('/delete-user-db', (req, res) => {
     } else {
       console.log('user db not deleted', username);
       console.log('error: ', error);
-      res.send(JSON.stringify({ message : 'Internal error' }));
+      res.status(500).send(JSON.stringify({ message : 'Internal error' }));
     }
   });
 });
@@ -147,7 +147,7 @@ app.post('/update-ssh-password', (req, res) => {
     } else {
       console.log('Failed to update password', username);
       console.log('error: ', error);
-      res.send(JSON.stringify({ message:'Internal error passwd' }));
+      res.status(500).send(JSON.stringify({ message:'Internal error passwd' }));
     }
   });
 });
