@@ -62,7 +62,7 @@ app.post('/create-ssh-user', (req, res) => {
     } else {
       console.log('user not created', username);
       console.log('error: ', error);
-      res.send({ message : 'Internal error useradd' });
+      res.status(500).send({ message : 'Internal error useradd' });
     }
   });
 });
