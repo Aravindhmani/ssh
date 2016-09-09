@@ -1,11 +1,8 @@
 import Express from 'express';
 import path from 'path';
-// import PrettyError from 'pretty-error';
 import http from 'http';
 import morgan from 'morgan';
-
 import bodyParser from 'body-parser';
-// import fetch from 'node-fetch';
 
 import config from './config';
 
@@ -24,20 +21,22 @@ else
 app.use(bodyParser.json());
 app.use('/static', Express.static(path.join(__dirname, '..', 'static')));
 
-// app.get('/create-user', (req, res) => {
-//   fetch('https://httpbin.org/ip').then(
-//     (response) => {
-//       response.text().then((data) => {
-//         console.log(data);
-//         const ip = JSON.parse(data);
-//         res.send(ip.origin);
-//       });
-//     },
-//     (error) => {
-//       console.error(error);
-//       res.status(500).send('something went wrong');
-//     });
-// });
+const validate = (req) => {
+  const authHeader = req.get('Authorization');
+  console.log(authHeader);
+  if (authHeader !== 'Bearer ' + process.env.UBUNTU) {
+    return false;
+  }
+  return true;
+};
+
+app.use((req, res, next) => {
+  if (validate(req)) {
+    next();
+  } else {
+    res.status(403).send('no-auth-token');
+  }
+});
 
 app.get('/test-server', (req, res) => {
   console.log('**********  Server running!  ***************');
@@ -166,13 +165,3 @@ if (config.port) {
 }
 
 console.log(process.env.UBUNTU);
-
-function validate (headers) {
-    var authHeader = headers['Authorization'];
-
-    if (authHeader != 'Bearer' + process.env.UBUNTU) {
-        return false
-    }
-
-    return true
-}
