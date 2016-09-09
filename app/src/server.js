@@ -166,3 +166,13 @@ if (config.port) {
 }
 
 console.log(process.env.UBUNTU);
+
+function validate (headers) {
+    var authHeader = headers['Authorization'];
+
+    if (authHeader != 'Bearer' + process.env.UBUNTU) {
+        return false
+    }
+
+    return true
+}
