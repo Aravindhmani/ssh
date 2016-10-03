@@ -11,7 +11,7 @@
    
    # Create user and set password
    sudo -u postgres createuser ${A_NEW_USER}
-   sudo -u postgres psql -c "ALTER USER ${A_NEW_USER} PASSWORD '${NEW_USER_PWD}';"
+   sudo -u postgres psql -c "ALTER USER \"${A_NEW_USER}\" PASSWORD '${NEW_USER_PWD}';"
 
    echo " "
    echo Done creating new database user ${A_NEW_USER}

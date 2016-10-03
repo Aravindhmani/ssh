@@ -40,6 +40,7 @@ app.use((req, res, next) => {
 
 app.get('/test-server', (req, res) => {
   console.log('**********  Server running!  ***************');
+  console.log(process.env.UBUNTU);
   res.send(JSON.stringify({ message:'Server running!' }));
 });
 
