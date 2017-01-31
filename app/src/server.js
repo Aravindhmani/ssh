@@ -24,6 +24,7 @@ app.use('/static', Express.static(path.join(__dirname, '..', 'static')));
 const validate = (req) => {
   const authHeader = req.get('Authorization');
   console.log(authHeader);
+  console.log(process.env.UBUNTU);
   if (authHeader !== 'Bearer ' + process.env.UBUNTU) {
     return false;
   }

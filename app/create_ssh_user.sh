@@ -34,7 +34,8 @@
    
    # addgroup imad-dev
    useradd -Ds /bin/bash
-   useradd -m -G imad-dev -p ${PASS_HASH} ${A_NEW_USER}
+   #useradd -m -G imad-dev -p ${PASS_HASH} ${A_NEW_USER}
+   useradd -m -s /bin/bash -G imad-dev -p ${PASS_HASH} ${A_NEW_USER}
    #passwd -e ${A_NEW_USER}
    #
    A_NEW_USER_HOME=/home/${A_NEW_USER}
