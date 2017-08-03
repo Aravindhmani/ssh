@@ -23,11 +23,15 @@
    #
    echo New User is $A_NEW_USER identified by $NEW_USER_PWD
    #
-   echo "Get ${A_NEW_USER} home directory .. . . . . . . . "
-   export A_NEW_USER_HOME=$( grep "${A_NEW_USER}" /etc/passwd | awk -F: '{print $6}' )
-   echo "New user's home directory is ${A_NEW_USER_HOME}"
+   #echo "Get ${A_NEW_USER} home directory .. . . . . . . . "
+   #export A_NEW_USER_HOME=$( grep "${A_NEW_USER}" /etc/passwd | awk -F: '{print $6}' )
+   #echo "New user's home directory is ${A_NEW_USER_HOME}"
    #
-   if [ "XX${A_NEW_USER_HOME}" == "XX" ]; then
+   if [ `id -u $A_NEW_USER 2>/dev/null || echo -1` -ge 0 ]; then
+   echo "The ${A_NEW_USER} user account is already configured in ${A_NEW_USER_HOME} . . . "
+   exit 1
+   
+   else
 
    export PASS_HASH=$(perl -e 'print crypt($ARGV[0], "password")' "$NEW_USER_PWD")
    #echo ${PASS_HASH}
@@ -39,9 +43,8 @@
    #passwd -e ${A_NEW_USER}
    #
    A_NEW_USER_HOME=/home/${A_NEW_USER}
-   else
-   echo "The ${A_NEW_USER} user account is already configured in ${A_NEW_USER_HOME} . . . "
-   exit 1
+  
+   
    fi
    #
    echo "................................................................"
